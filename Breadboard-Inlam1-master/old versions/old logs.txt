@@ -1,0 +1,72 @@
+#Update
+Har nu en fungerande version som använder sig av pekare, kompilerar och körs fint. Har lagt till lite konstanta defines, snyggat upp koden lite här o där. Fortfarande lite saker som behöver ändras på. Men har nu en fungerande version som använder sig av pekare. Yeih! :) 
+
+
+#Update:
+Har nu fungerande kod som anvÃƒÂ¤nder sig av struct samt placerar bokstaven X pÃƒÂ¥ samtliga platser pÃƒÂ¥ brÃƒÂ¶dbordet.
+
+En anvÃ¤gning jag fick gÃ¶ra var nÃ¤r jag skulle fÃ¥ in x, y kordinaterna frÃ¥n user. FÃ¶rst tÃ¤nkte jag gÃ¶ra det enkelt i en funktion, men kom pÃ¥ senare att det gÃ¥r ju bara att returnera ett vÃ¤rde, fÃ¶rsta tanken var dÃ¥ att jag skulle behÃ¶va gÃ¶ra tvÃ¥ st funktioner, en fÃ¶r X och en fÃ¶r Y, men jag sÃ¶kte pÃ¥ internet och insÃ¥g att jag kan kunde fÃ¥ bra anvÃ¤ndning av struct dÃ¤r, fÃ¶r dÃ¥ kunde jag kapsla in flera vÃ¤rden i ett och returnera det vÃ¤rdet, som i sig innehÃ¥ll bÃ¥de X och Y. Att skriva tvÃ¥ enskila funktioner skulle varit enkelt, men jag tycker att en struct var mer lÃ¤mplig i denna situation, Ã¤ven om det gÃ¶r koden lite mer komplicerad, Ã¤r den fortfarande enkel att lÃ¤sa och fÃ¶rstÃ¥ vad den gÃ¶r.
+
+#27:de 12:09
+mÃƒÂ¥nga tillÃƒÂ¤gg befinner sig enbart i main.c filen just nu, detta bÃƒÂ¶r jag ordna sÃƒÂ¥ att dem ligger i rÃƒÂ¤tt .h/.c fil innan jag skriver funktionen fÃƒÂ¶r att placera ut komponenten, fÃƒÂ¶r att undvika att jag ackumulerar potentiella fel. Blir svÃƒÂ¥rare att felsÃƒÂ¶ka i det fallet.
+
+#Update 27:de 14:50
+Har ordnat upp litegrann i koden. Har fÃ¶r fÃ¶rsta gÃ¥ngen anvÃ¤nt mig av **pekare till pekare**, jag fick en varning vid kompilering, och genom felsÃ¶kning med ex. sizeof bÃ¶rjade jag fÃ¶rstÃ¥ var varningen kom ifrÃ¥n. MisstÃ¤nkte sedan att det var nÃ¥got som inte stÃ¤mde med funktionsprototypen. PrÃ¶vade mig fram, och tillslut testade jag lÃ¤gga till ** vid char argumentet och dÃ¥ Ã¥kte varningen bort. Det Ã¤r logiskt eftersom vÃ¤rdet som kommer dit Ã¤r ju faktiskt en pekare vars innehÃ¥ll Ã¤r en pekare. Jag fÃ¶rstÃ¥r mig inte riktigt pÃ¥ detta fenomen till 100%, men kanske 70% just nu. FÃ¶rmodligen klarnar det upp snart.
+
+**Update 28:de, 12:20**
+FÃ¶rsÃ¶kte ordna validering fÃ¶r user-input genom att avreferera user_choice och jÃ¤mfÃ¶ra det med tillÃ¥tna symboler. BÃ¥de sizeof och utskrift visade att det var samma sak, 1 byte, och rÃ¤tt bokstav. Men nÃ¥gonting gick fel vid valideringen. PrÃ¶vade ta bort hela grejjen med pekare & pekare till pekare senare i annat funktionsanrop och dÃ¥ Ã¥kte den dÃ¤r errorn jag fÃ¥tt bort. Samt fungerande valideringen, vilket var fÃ¶rvÃ¤ntat. NÃ¥got jag borde kolla in, varfÃ¶r == operatorn inte fungerande med avreferering. Det jag gjorde var fÃ¶ljande:
+
+if((pekaresymbol)user_choice == 'L' eller LED.symbol)
+	return ...
+else
+	....
+Detta fungerade inte, utan den gick in i else statement Ã¤ven om jag enbart matade in ett L fÃ¶ljt av enter. Finns sÃ¤kert nÃ¥gon bra anledning... 
+
+
+**NÃƒÂ¤sta del:**
+Skriva en funktion som skriver ut breadboardet fÃƒÂ¶r anvÃƒÂ¤ndaren. Denna funktion kommer fÃƒÂ¶rmodligen behÃƒÂ¶va anvÃƒÂ¤nda sig av ett argument, en pekare, char kanske, fÃƒÂ¶r att fÃƒÂ¥ tillgÃƒÂ¥ng till 2D arrayn.
+
+Programmet ska kunna:
+- Placera ut komponenter pÃƒÂ¥ boardet
+- Skriva ut boardet, i utskriften ska det framgÃƒÂ¥ vilka komponenter som
+anvÃƒÂ¤ndaren placerat ut.
+- En komponent placeras ut genom att anvÃƒÂ¤ndaren anger ko-ordinater pÃƒÂ¥ boardet.
+
+Vilka funktioner behÃƒÂ¶ver jag?
+
+**create_board** - skapa ett 2D fÃƒÂ¤lt (10x30) matris
+--IstÃƒÂ¤llet fÃƒÂ¶r att ha en funktion fÃƒÂ¶r att skapa brÃƒÂ¤det skapade jag brÃƒÂ¤det i globala rymden i programmet efter expirementerat med att en funktion skulle returnera en adress till en 2d array, fick massa varningar som jag inte lyckades lÃƒÂ¶sa. Denna funktion blir istÃƒÂ¤llet fill_board som kommer placera ut tecknet 'X' pÃƒÂ¥ samtliga platser i 2d arrayn.(denna kod hamnade i globalt skope i main filen)... 26:e, fÃƒÂ¶rsta steget avklarat. Skapat en 2D array, fyllt den med tecknet 'X'. OcksÃƒÂ¥ prÃƒÂ¶vat kompilering med .h och tvÃƒÂ¥ .c filer, det funkade fint. Men fÃƒÂ¶r development kommer jag hÃƒÂ¥lla allt inom main eftersom det tar en stund att kompilera manuellt ifrÃƒÂ¥n objektfilerna, och passar inte fÃƒÂ¶r att testning & utveckling.
+
+**print_board** - skriv ut boardet fÃƒÂ¶r anvÃƒÂ¤ndaren, i ett anvÃƒÂ¤ndarvÃƒÂ¤nligt format som representerar en 30x10 matris.
+
+**choose_component** - visa anvÃƒÂ¤ndaren alternativ fÃƒÂ¶r vilka komponenter som ÃƒÂ¤r tillgÃƒÂ¤ngliga, lÃƒÂ¥t sedan anvÃƒÂ¤ndaren mata in
+vilken komponent hen vill placera ut.
+
+**place_component** - be anvÃƒÂ¤ndaren mata in ko-ordinater fÃƒÂ¶r var komponenten ska placeras (komponenten som valdes i fÃƒÂ¶regÃƒÂ¥ende
+steg.
+
+**remove_component** - frÃƒÂ¥ga anvÃƒÂ¤ndaren efter ko-ordinaterna fÃƒÂ¶r komponenten som skall tas bort, ÃƒÂ¥terstÃƒÂ¤ll detta vÃƒÂ¤rde till
+standard(tomt) vÃƒÂ¤rde. 
+
+
+
+Specifikationer fÃƒÂ¶r hur en funktion ska byggas & fungera:
+
+
+create_board bÃƒÂ¶r anvÃƒÂ¤nda sig av 2D fÃƒÂ¤lt,
+skapa ett 10x30 fÃƒÂ¤lt. Med andra ord, ett fÃƒÂ¤lt som har 10 element, och vardera element innehar 30 egna element. Detta ger oss en 2D matris.
+
+
+
+
+
+
+
+
+the error im getting:
+
+boardDefine.c: In function 'place_component':
+boardDefine.c:121:28: warning: assignment makes integer from pointer without a cast [-Wint-conversi
+n]
+  myBoard.pos[x - 1][y - 1] = *component;
+                            ^
