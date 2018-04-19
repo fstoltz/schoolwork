@@ -1,0 +1,12 @@
+{
+    "python.pythonPath": "C:\\Users\\fstoltz\\AppData\\Local\\Programs\\Python\\Python36-32\\python.exe",
+    "python.linting.enabled": false,
+    "python.unitTest.unittestArgs": [
+        "-v",
+        "-s",
+        ".",
+        "-p",
+        "test_*.py"
+    ],
+    "python.unitTest.unittestEnabled": true
+}
